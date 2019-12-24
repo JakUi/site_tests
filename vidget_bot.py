@@ -43,7 +43,7 @@ def send_without_handler():
     for i in range (0, len(lines)):
         set_of_recipient.add(lines[i]) #в множество записываем id каждого пользователя
     all_users.close()
-    send = 'Виджет не отвечает!' #отправим пользователю содержимое поста
+    send = 'Виджет или сайт не отвечает!' #отправим пользователю содержимое поста
     set_of_recipient = list(set_of_recipient) #преобразуем множество в список
     print(set_of_recipient)
     for i in range(0, len(set_of_recipient)):
@@ -60,7 +60,7 @@ def send_cancel():
     for i in range (0, len(lines)):
         set_of_recipient.add(lines[i]) #в множество записываем id каждого пользователя
     all_users.close()
-    send = 'Виджет снова в строю!' #отправим пользователю содержимое поста
+    send = 'Виджет или сайт снова в строю!' #отправим пользователю содержимое поста
     set_of_recipient = list(set_of_recipient) #преобразуем множество в список
     for i in range(0, len(set_of_recipient)):
         if set_of_recipient[i] != '':
@@ -77,16 +77,16 @@ def monitoring(sended, cancel_event, event):
         #r = requests.get('https://widget.planoplan.com/9114405bf9eb0ecf6014a8ce9f6f44c2') #запрос. Тестовый виджет
         if r.status_code != requests.codes.ok or started.status_code != requests.codes.ok:
             event = True
-        elif r.status_code == requests.codes.ok or started.status_code != requests.codes.ok and event == True:  
-            event = False
-            send_cancel()
-            sended = False
-            print('end')
-        #else:
-            #print('ok')
-        print(r.status_code)
-        print(started.status_code)
-        if event == True and sended == False: #если виджет не доступен отправляем сообщение
+        elif r.status_code == requests.codes.ok or started.status_code == requests.codes.ok:
+            print(event)
+            if event == True: 
+                event = False
+                send_cancel()
+                sended = False
+                print('end')
+        #print(r.status_code)
+        #print(started.status_code)
+        if event == True and sended == False: #если виджет не доступен отправляем сообщение 
             send_without_handler()
             sended = True #флажок, означает, что месседж о том, что виджет лежит был отправлен
 
